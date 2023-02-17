@@ -78,6 +78,8 @@ NSString *const BADGE_NUMBER = @"badgeNumber";
 NSString *const MILLISECONDS_SINCE_EPOCH = @"millisecondsSinceEpoch";
 NSString *const REPEAT_INTERVAL = @"repeatInterval";
 NSString *const REPEAT_TIME = @"repeatTime";
+//ADD2023
+NSString *const REPEAT_MINUTES = @"repeatMinutes";
 NSString *const HOUR = @"hour";
 NSString *const MINUTE = @"minute";
 NSString *const SECOND = @"second";
@@ -97,8 +99,6 @@ NSString *const UNSUPPORTED_OS_VERSION_ERROR_CODE = @"unsupported_os_version";
 NSString *const GET_ACTIVE_NOTIFICATIONS_ERROR_MESSAGE =
     @"iOS version must be 10.0 or newer to use getActiveNotifications";
 
-//ADD2023
-NSString *const REPEAT_MINUTES = @"repeatMinutes";
 
 typedef NS_ENUM(NSInteger, RepeatInterval) {
   EveryMinute,
@@ -1068,9 +1068,13 @@ static FlutterError *getFlutterError(NSError *error) {
 
 - (UNTimeIntervalNotificationTrigger *)buildUserNotificationTimeIntervalTrigger:
     (id)arguments API_AVAILABLE(ios(10.0)) {
+
+  //ADD2023
+  NSInteger repeatMinutes = [arguments[REPEAT_MINUTES] integerValue];
+
   switch ([arguments[REPEAT_INTERVAL] integerValue]) {
   case EveryMinute:
-    int repeatMinutes = [arguments[REPEAT_MINUTES] intValue];
+
     return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * repeatMinutes
                                                               repeats:YES];
   case Hourly:
