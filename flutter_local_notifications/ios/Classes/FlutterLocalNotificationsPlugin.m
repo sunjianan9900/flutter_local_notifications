@@ -1070,7 +1070,8 @@ static FlutterError *getFlutterError(NSError *error) {
     (id)arguments API_AVAILABLE(ios(10.0)) {
   switch ([arguments[REPEAT_INTERVAL] integerValue]) {
   case EveryMinute:
-    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * arguments[REPEAT_MINUTES]
+    int repeatMinutes = [arguments[REPEAT_MINUTES] intValue];
+    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * repeatMinutes
                                                               repeats:YES];
   case Hourly:
     return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * 60
