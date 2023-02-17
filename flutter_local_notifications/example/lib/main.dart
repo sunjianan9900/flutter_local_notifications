@@ -1818,7 +1818,8 @@ class _HomePageState extends State<HomePage> {
         'repeating body',
         RepeatInterval.everyMinute,
         notificationDetails,
-        androidAllowWhileIdle: true);
+        androidAllowWhileIdle: true,
+        repeatMinutes: 2);
   }
 
   Future<void> _scheduleDailyTenAMNotification() async {
@@ -2756,7 +2757,8 @@ Future<void> _showLinuxNotificationWithByteDataIcon() async {
         data: iconBytes,
         width: iconData.width,
         height: iconData.height,
-        channels: 4, // The icon has an alpha channel
+        channels: 4,
+        // The icon has an alpha channel
         hasAlpha: true,
       ),
     ),

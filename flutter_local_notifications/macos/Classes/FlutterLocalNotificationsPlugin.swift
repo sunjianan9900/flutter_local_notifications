@@ -455,8 +455,8 @@ public class FlutterLocalNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             let repeatInterval = RepeatInterval.init(rawValue: rawRepeatInterval)!
             switch repeatInterval {
             case .everyMinute:
-                notification.deliveryDate = Date.init(timeIntervalSinceNow: 60)
-                notification.deliveryRepeatInterval = DateComponents.init(minute: 1)
+                notification.deliveryDate = Date.init(timeIntervalSinceNow: 2 * 60)
+                notification.deliveryRepeatInterval = DateComponents.init(minute: 2)
             case .hourly:
                 notification.deliveryDate = Date.init(timeIntervalSinceNow: 60 * 60)
                 notification.deliveryRepeatInterval = DateComponents.init(hour: 1)

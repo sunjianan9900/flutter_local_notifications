@@ -817,13 +817,10 @@ class IOSFlutterLocalNotificationsPlugin
 
   @override
   Future<void> periodicallyShow(
-    int id,
-    String? title,
-    String? body,
-    RepeatInterval repeatInterval, {
-    DarwinNotificationDetails? notificationDetails,
-    String? payload,
-  }) async {
+      int id, String? title, String? body, RepeatInterval repeatInterval,
+      {DarwinNotificationDetails? notificationDetails,
+      String? payload,
+      int repeatMinutes = 1}) async {
     validateId(id);
     await _channel.invokeMethod('periodicallyShow', <String, Object?>{
       'id': id,
@@ -832,7 +829,8 @@ class IOSFlutterLocalNotificationsPlugin
       'calledAt': clock.now().millisecondsSinceEpoch,
       'repeatInterval': repeatInterval.index,
       'platformSpecifics': notificationDetails?.toMap(),
-      'payload': payload ?? ''
+      'payload': payload ?? '',
+      'repeatMinutes': repeatMinutes
     });
   }
 

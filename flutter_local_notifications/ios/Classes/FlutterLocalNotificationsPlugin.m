@@ -97,6 +97,9 @@ NSString *const UNSUPPORTED_OS_VERSION_ERROR_CODE = @"unsupported_os_version";
 NSString *const GET_ACTIVE_NOTIFICATIONS_ERROR_MESSAGE =
     @"iOS version must be 10.0 or newer to use getActiveNotifications";
 
+//ADD2023
+NSString *const REPEAT_MINUTES = @"repeatMinutes";
+
 typedef NS_ENUM(NSInteger, RepeatInterval) {
   EveryMinute,
   Hourly,
@@ -699,6 +702,7 @@ static FlutterError *getFlutterError(NSError *error) {
 - (void)periodicallyShow:(NSDictionary *_Nonnull)arguments
                   result:(FlutterResult _Nonnull)result {
   if (@available(iOS 10.0, *)) {
+    // iOS10 以上的用法
     UNMutableNotificationContent *content =
         [self buildStandardNotificationContent:arguments result:result];
     UNTimeIntervalNotificationTrigger *trigger =
@@ -1066,7 +1070,7 @@ static FlutterError *getFlutterError(NSError *error) {
     (id)arguments API_AVAILABLE(ios(10.0)) {
   switch ([arguments[REPEAT_INTERVAL] integerValue]) {
   case EveryMinute:
-    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60
+    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * arguments[REPEAT_MINUTES]
                                                               repeats:YES];
   case Hourly:
     return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:60 * 60
