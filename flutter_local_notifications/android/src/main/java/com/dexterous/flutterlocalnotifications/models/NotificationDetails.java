@@ -126,6 +126,10 @@ public class NotificationDetails implements Serializable {
   private static final String NUMBER = "number";
   private static final String AUDIO_ATTRIBUTES_USAGE = "audioAttributesUsage";
 
+  private static final String REPEAT_MINUTES = "repeatMinutes";
+
+  public Integer repeatMinutes;
+
   public Integer id;
   public String title;
   public String body;
@@ -205,6 +209,8 @@ public class NotificationDetails implements Serializable {
     notificationDetails.body = (String) arguments.get(BODY);
     notificationDetails.scheduledDateTime = (String) arguments.get(SCHEDULED_DATE_TIME);
     notificationDetails.timeZoneName = (String) arguments.get(TIME_ZONE_NAME);
+
+
     if (arguments.containsKey(SCHEDULED_NOTIFICATION_REPEAT_FREQUENCY)) {
       notificationDetails.scheduledNotificationRepeatFrequency =
           ScheduledNotificationRepeatFrequency.values()[
@@ -223,6 +229,14 @@ public class NotificationDetails implements Serializable {
     if (arguments.containsKey(REPEAT_INTERVAL)) {
       notificationDetails.repeatInterval =
           RepeatInterval.values()[(Integer) arguments.get(REPEAT_INTERVAL)];
+
+
+      /// 设置通知间隔分钟数
+      if(notificationDetails.repeatInterval == RepeatInterval.EveryMinute){
+        notificationDetails.repeatMinutes = (Integer) arguments.get(REPEAT_MINUTES);
+      }
+
+
     }
     if (arguments.containsKey(REPEAT_TIME)) {
       @SuppressWarnings("unchecked")

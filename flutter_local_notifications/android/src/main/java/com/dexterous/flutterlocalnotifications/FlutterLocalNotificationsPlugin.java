@@ -626,6 +626,7 @@ public class FlutterLocalNotificationsPlugin
       Context context,
       NotificationDetails notificationDetails,
       Boolean updateScheduledNotificationsCache) {
+    /// notificationDetails 已经携带了 repeatTime 单位是分钟
     long repeatInterval = calculateRepeatIntervalMilliseconds(notificationDetails);
 
     long notificationTriggerTime = notificationDetails.calledAt;
@@ -642,6 +643,7 @@ public class FlutterLocalNotificationsPlugin
       notificationTriggerTime = calendar.getTimeInMillis();
     }
 
+    /// 计算显示下一次通知的时间
     notificationTriggerTime =
         calculateNextNotificationTrigger(notificationTriggerTime, repeatInterval);
 
@@ -654,9 +656,11 @@ public class FlutterLocalNotificationsPlugin
     AlarmManager alarmManager = getAlarmManager(context);
 
     if (notificationDetails.scheduleMode.useAllowWhileIdle()) {
+      System.out.println("***提醒方案A");
       setupAllowWhileIdleAlarm(
           notificationDetails, alarmManager, notificationTriggerTime, pendingIntent);
     } else {
+      System.out.println("***提醒方案B");
       alarmManager.setInexactRepeating(
           AlarmManager.RTC_WAKEUP, notificationTriggerTime, repeatInterval, pendingIntent);
     }
@@ -719,7 +723,7 @@ public class FlutterLocalNotificationsPlugin
     long repeatInterval = 0;
     switch (notificationDetails.repeatInterval) {
       case EveryMinute:
-        repeatInterval = 60000;
+        repeatInterval = 60000 *  notificationDetails.repeatMinutes;
         break;
       case Hourly:
         repeatInterval = 60000 * 60;

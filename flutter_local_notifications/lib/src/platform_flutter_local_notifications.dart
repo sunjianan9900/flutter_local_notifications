@@ -386,14 +386,11 @@ class AndroidFlutterLocalNotificationsPlugin
 
   @override
   Future<void> periodicallyShow(
-    int id,
-    String? title,
-    String? body,
-    RepeatInterval repeatInterval, {
-    AndroidNotificationDetails? notificationDetails,
-    String? payload,
-    AndroidScheduleMode scheduleMode = AndroidScheduleMode.exact,
-  }) async {
+      int id, String? title, String? body, RepeatInterval repeatInterval,
+      {AndroidNotificationDetails? notificationDetails,
+      String? payload,
+      AndroidScheduleMode scheduleMode = AndroidScheduleMode.exact,
+      int repeatMinutes = 1}) async {
     validateId(id);
     await _channel.invokeMethod('periodicallyShow', <String, Object?>{
       'id': id,
@@ -404,6 +401,7 @@ class AndroidFlutterLocalNotificationsPlugin
       'platformSpecifics':
           _buildPlatformSpecifics(notificationDetails, scheduleMode),
       'payload': payload ?? '',
+      'repeatMinutes': repeatMinutes
     });
   }
 

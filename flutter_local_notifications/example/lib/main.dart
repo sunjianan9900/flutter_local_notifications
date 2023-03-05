@@ -94,6 +94,7 @@ Future<void> main() async {
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     selectedNotificationPayload =
         notificationAppLaunchDetails!.notificationResponse?.payload;
+    print('>>> 点击进入了 PayLoad $selectedNotificationPayload');
     initialRoute = SecondPage.routeName;
   }
 
@@ -182,9 +183,11 @@ Future<void> main() async {
         (NotificationResponse notificationResponse) {
       switch (notificationResponse.notificationResponseType) {
         case NotificationResponseType.selectedNotification:
+          debugPrint('用户点击了通知：selectedNotification');
           selectNotificationStream.add(notificationResponse.payload);
           break;
         case NotificationResponseType.selectedNotificationAction:
+          debugPrint('用户点击了选项：selectedNotificationAction');
           if (notificationResponse.actionId == navigationActionId) {
             selectNotificationStream.add(notificationResponse.payload);
           }
@@ -343,6 +346,7 @@ class _HomePageState extends State<HomePage> {
 
   void _configureSelectNotificationSubject() {
     selectNotificationStream.stream.listen((String? payload) async {
+      debugPrint('>>> 进入SecondPage $payload');
       await Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) => SecondPage(payload),
       ));
@@ -576,7 +580,8 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     PaddedElevatedButton(
-                      buttonText: 'Show plain notification as public on every '
+                      buttonText:
+                          '测试 Show plain notification as public on every '
                           'lockscreen',
                       onPressed: () async {
                         await _showPublicNotification();
@@ -2031,20 +2036,28 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _showPublicNotification() async {
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker',
-            visibility: NotificationVisibility.public);
+        AndroidNotificationDetails(
+      'your channel id',
+      'your channel name',
+      channelDescription: 'your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      visibility: NotificationVisibility.public,
+    );
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        id++,
-        'public notification title',
-        'public notification body',
-        notificationDetails,
-        payload: 'item x');
+
+    await flutterLocalNotificationsPlugin.periodicallyShow(
+        id, "标题", "测试", RepeatInterval.everyMinute, notificationDetails,
+        repeatMinutes: 1, payload: id.toString());
+
+    // await flutterLocalNotificationsPlugin.show(
+    //     id++,
+    //     'public notification title',
+    //     'public notification body',
+    //     notificationDetails,
+    //     payload: 'item x');
   }
 
   Future<void> _showNotificationWithSubtitle() async {
